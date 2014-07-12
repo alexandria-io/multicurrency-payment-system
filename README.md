@@ -15,11 +15,11 @@ The multi-currency-API has a few key features:
 
 The following is an explination of how each request is structured:
 
-`
-quote POST
-    currency      string      ex: "USD"
-    amount        float       ex: 14.05
-   *r_currency    string      ex: "BTC"
-`
-The response is   
+
+   quote POST
+       currency      string      ex: "USD"
+       amount        float       ex: 14.05
+      *r_currency    string      ex: "BTC"
+
+The response is determined by whether or not `r_currency` is specified.
     
