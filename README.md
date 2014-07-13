@@ -35,6 +35,8 @@ The response is determined by whether or not `r_currency` is specified.
 
 If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
 
+*quote request* 
+
     {
         "currency": "USD"
         "amount": 20.00
@@ -95,5 +97,8 @@ Below is the future specification for this API call in full.
 
 #### payment_address response 
 
-The payment_address API 
+The payment_address API returns a response based on the input received. 
+
+
+
 
