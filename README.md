@@ -78,9 +78,7 @@ The payment_address api includes many options to serve callback data to your app
 
 Below is the future specification for this API call in full.
 
-***NOTE: the basic API v0.1 will have only the above examples***
-
-***The following examples will be implemented in further versions:***
+*NOTE: the basic API v0.1 will have only the above examples. The following examples will be implemented in further versions:*
 
 ###### HTTP_POST PARAMS
 
