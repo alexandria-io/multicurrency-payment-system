@@ -88,7 +88,9 @@ The response will simply be a double value with the converted amount in the spec
     POST
       currency        string        ex: "BTC"
       amount          int           ex: 100000
-     *forward_to       string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
+     *convert         string        ex: "FLO"
+     *fee_quote       boolean       ex: true
+     *forward_to      string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
      *timeout         int           ex: 59000, 1405230924
      *callback        JSON object       
         method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
@@ -100,6 +102,8 @@ The response will simply be a double value with the converted amount in the spec
 
 * `currency` defines which currency the requestor wants to pay in.
 * `amount` defines the amount of satoshis of that currency that marks this payment as "complete". If not specified, there is no minimum, and even 1 satoshi will mark the payment as "complete".
+* `convert`, when set to a known currency, will convert `amount` to the currency set in `currency`.
+* `fee_quote`, when set to `true`, will prevent this program from creating a new address or payment listener. The payment response will be the cost (in satoshis of `currency`) of setting up that listener.
 * `forward_to` if specified, the exact amount paid (minus fees) will be forwarded to the address specified.
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
 * `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
@@ -138,11 +142,12 @@ Callbacks are not limited to `HTTP_POST`. You can request writing data to the bl
 
 #### payment response 
 
-    address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
-    timeout      int         ex: 10000
+     address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
+     currency     string      ex: BTC
+    *amount       int         ex: 300000000
+     timeout      int         ex: 10000
 
-
-The payment API responds based upon on the input of the received request. It will always, at the very least, respond with a pamynet address for the currency specified.
+The payment API responds based upon on the request. It will always, at the very least, respond with a pamynet address for the currency specified, and the amount that must be paid.
 
 #### payment examples
 
