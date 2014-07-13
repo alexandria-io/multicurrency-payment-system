@@ -114,9 +114,9 @@ The response will simply be a double value with the converted amount in the spec
 
 The payment API request will build a payment listener. When the payment listener sees that certain conditions are met, a callback is fired off. Callbacks are fired off when both `amount` and `min_confirms` are reached. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options for callbacks served by the multi-currency-api.
 
-###### HTTP_POST PARAMS
+###### HTTP\_POST PARAMS
 
-HTTP_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
+HTTP\_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
 
     url             string      ex: "http://florincoin.info/mucua/callback/
     data            JSON object
@@ -130,9 +130,9 @@ HTTP_POST callbacks are programmable. This makes use of the application's connec
 * All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with a callback containing the block number.
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
-###### BLOCKCHAIN_WRITE PARAMS
+###### BLOCKCHAIN\_WRITE PARAMS
 
-Callbacks are not limited to HTTP_POST. You can request writing data to the blockchain instead.
+Callbacks are not limited to HTTP\_POST. You can request writing data to the blockchain instead.
 
     data      string      ex: "Hello world! I love freedom of speech."
     binary    string      ex: "01001000" 
