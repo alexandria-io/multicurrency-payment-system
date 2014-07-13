@@ -120,7 +120,7 @@ The payment api includes many options to serve callback data to your application
 * `max_confirms` is the maximum amount of confirms required to trigger a callback. After `max_confirms` has passed, no more callbacks will be sent.
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
-##### BLOCKCHAIN_WRITE PARAMS
+###### BLOCKCHAIN_WRITE PARAMS
 
     data      string      ex: "Hello world! I love freedom of speech."
     binary    string      ex: "01001000" 
