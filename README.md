@@ -18,14 +18,19 @@ Requests
 
 Below is a list of all requests and how they are handled by the program.
 
-#### quote
+#### quote request
 
     POST
       currency      string      ex: "USD"
       amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
 
-* `currency` specifies the 
+* `currency` specifies the base crypto, `r_currency` represents a specific currency pairing we are interested in.
+
+Future versions will allow multiple `r_currency` options.
+
+#### quote response
+
 The response is determined by whether or not `r_currency` is specified.
 
 If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
@@ -57,7 +62,7 @@ The response will simply be a double value with the converted amount in the spec
     { 30000 }
 
 
-#### payment_address
+#### payment_address request
 
     POST
       currency      string      ex: "BTC"
@@ -88,7 +93,7 @@ Below is the future specification for this API call in full.
       hash    boolean
 
 
-#### Response
+#### payment_address response 
 
 The payment_address API 
 
