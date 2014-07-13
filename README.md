@@ -13,15 +13,17 @@ The multi-currency-API has a few key features:
 * Serves data and sends HTTP responses when conditions are met.
 * Records all completed transactions into a ledger for historical purposes.
 
-The following is an explination of how each request is structured:
+Below is a list of all requests and how they are handled by the program.
 
-**quote**
+quote
+-----
 
     quote POST
       currency      string      ex: "USD"
-      amount        float       ex: 14.05
+      amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
 
+* `currency` specifies the 
 The response is determined by whether or not `r_currency` is specified.
 
 If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
@@ -54,3 +56,8 @@ The response will simply be a double value with the converted amount in the spec
 
 
 **payment_address**
+
+    payment_address POST
+      currency      string      ex: "BTC"
+      amount        int         ex: 
+
