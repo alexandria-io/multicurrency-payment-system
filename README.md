@@ -87,29 +87,30 @@ The response will simply be a double value with the converted amount in the spec
 
     POST
       currency        string        ex: "BTC"
-      amount          int           ex: 100000
      *convert         string        ex: "FLO"
+      amount          int           ex: 100000
+      min_confirms    int           ex: 5
+      timeout         int           ex: 59000, 1405230924
      *fee_quote       boolean       ex: true
      *forward_to      string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
-     *timeout         int           ex: 59000, 1405230924
+
      *callback        JSON object       
         method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
-        min_confirms  int           ex: 5
         max_confirms  int           ex: 20
         params        JSON object
           HTTP_POST PARAMS:         See below.
           BLOCKCHAIN_WRITE PARAMS:  See below.
 
 * `currency` defines which currency the requestor wants to pay in.
-* `amount` defines the amount of satoshis of that currency that marks this payment as "complete". If not specified, there is no minimum, and even 1 satoshi will mark the payment as "complete".
 * `convert`, when set to a known currency, will convert `amount` to the currency set in `currency`.
+* `amount` defines the amount of satoshis of that currency that marks this payment as "complete". If not specified, there is no minimum, and even 1 satoshi will mark the payment as "complete".
+* `min_confirms` is the minimum amount of confirms needed to consider the payment complete.
 * `fee_quote`, when set to `true`, will prevent this program from creating a new address or payment listener. The payment response will be the cost (in satoshis of `currency`) of setting up that listener.
 * `forward_to` if specified, the exact amount paid (minus fees) will be forwarded to the address specified.
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
 * `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
 * `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
-* `min_confirms` is the minimum amount of confirms needed to trigger a callback.
-* `max_confirms` is the maximum amount of confirms required to trigger a callback. After `max_confirms` has passed, no more callbacks will be sent.
+* `callback->max_confirms` is the maximum amount of confirms that will fire off a callback. After `max_confirms` has passed, no more callbacks will be sent.
 * `callback->params` define the callback service.
 
 The payment API request will build a payment listener. When the payment listener sees that certain conditions are met, a callback is fired off. Callbacks are fired off when both `amount` and `min_confirms` are reached. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options for callbacks served by the multi-currency-api.
@@ -119,6 +120,7 @@ The payment API request will build a payment listener. When the payment listener
 HTTP\_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
 
     url             string      ex: "http://florincoin.info/mucua/callback/
+    tx_notify       boolean     ex: false
     data            JSON object
       block         boolean     ex: true
       time          boolean     ex: true
@@ -127,7 +129,8 @@ HTTP\_POST callbacks are programmable. This makes use of the application's conne
       custom        JSON object
 
 * `url` is the URL that will be served with callback POST data. *Note: when a callback fails, it will retry every 2, 4, 8, ... etc seconds, growing exponentially.*
-* All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with a callback containing the block number.
+* `tx_notify` is a boolean which determines whether or not a callback will be sent when a new transaction paying this address is detected.
+* `data`: All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with a callback containing the block number.
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
 ###### BLOCKCHAIN\_WRITE PARAMS
@@ -142,12 +145,21 @@ Callbacks are not limited to HTTP\_POST. You can request writing data to the blo
 
 #### payment response 
 
+     id           int         ex: 11022047
      address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
-     currency     string      ex: BTC
-    *amount       int         ex: 300000000
+     currency     string      ex: "BTC"
+    *amount       int         ex: 3050
+    *fees         int         ex: 50
      timeout      int         ex: 10000
 
-The payment API responds based upon on the request. It will always, at the very least, respond with a pamynet address for the currency specified, and the amount that must be paid.
+The payment API responds based upon on the request. It will always, at the very least, respond with an id and pamynet address for the currency specified as well as the amount that must be paid.
+
+* `id` is a unique identifier that must be passed to the status request. It is a unique identifier that identifies a payment listener and its associated address.
+* `address` is a crypto-currency address that payments will be made to. The payment listener associated with this address is created when this response is sent.
+* `currency` is the currency the address is associated with, and is the currency payments must be made in to that address.
+* `amount` will be an integer representation of the minimum amount of satoshis that must be spent in `currency` before the payment is considered complete.
+* `fees` is the number of satoshis paid in fees.
+* `timeout` is the number of seconds the listener will stay alive.
 
 #### payment examples
 
@@ -159,7 +171,40 @@ If `callback` is specified, the payment API (which runs as a service) will begin
 
     {
         "currency":"BTC",
+        "convert":"FLO",
+        "amount":2000000,
+        "min_confirms":30
+        "fee_quote":true,
+        "timeout":59300,
+        "callback": {
+            "method":"HTTP_POST",
+            "max_confirms":40,
+            "params": {
+                "url":"http://florincoin.info/mucua/callback",
+                "tx_notify":true,
+                "data": {
+                    "block":true,
+                    "time":true,
+                    "hash":true
+                    "confirms":true,
+                    "custom":"{'local_id':'BZ99ML7'}"
+                }
+            }
+        }
     }
+
+*payment response:*
+
+    {
+       "id":11022047,
+       "address":"17qfT3hssK5mx7km7QtuogiXeka9Spo1VK",
+       "currency":"BTC",
+       "amount":3050,
+       "fees":50,
+       "timeout":10000
+    }
+
+In the above example, a request is sent to get a Bitcoin payment address to watch for a payment equal to 2000000 satoshis of FLO. The response shows that 3050 satoshis of bitcoin are necessary to cover the cost of 2000000 satoshis of FLO. There is a minimum number of confirms set, and a fee quote is requested. The fee quote in this case is 50 satoshis of bitcoin.
 
 ---
 
@@ -168,10 +213,12 @@ If `callback` is specified, the payment API (which runs as a service) will begin
 #### status request
 
     POST
+      id             string      ex: "177-134-559"
       address        string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
      *callback_info  boolean     ex: true
 
-* `address` specifies the payment request we're interested in. Each payment request is identified by the address created for it.
+* `id` is the unique identifier given to the requestor when they received a response from the payment API.
+* `address` specifies the address the requestor wants information about. Each payment listener is identified by the id number and address created for it.
 * `callback_info` specifies whether or not the requestor wants callback info in the response.
 
 #### status response
