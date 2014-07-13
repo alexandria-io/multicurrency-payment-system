@@ -11,7 +11,7 @@ The multi-currency-API has a few key features:
 
 * Provides multi-currency exchange rates based on specified exchange APIs.
 * Handles requests for payment addresses.
-* Creates a payment listener to fire off a callbacks when conditions are met.
+* Creates a payment listener to fire off callbacks when conditions are met.
 * Forwards funds to a specified address (only for homogeneous currency requests).
 * Records all completed transactions into a ledger for historical purposes.
 
