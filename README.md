@@ -132,7 +132,7 @@ HTTP_POST callbacks are programmable. This makes use of the application's connec
 
 ###### BLOCKCHAIN_WRITE PARAMS
 
-Callbacks are not limited to `HTTP_POST`. You can request writing data to the blockchain instead.
+Callbacks are not limited to HTTP_POST. You can request writing data to the blockchain instead.
 
     data      string      ex: "Hello world! I love freedom of speech."
     binary    string      ex: "01001000" 
