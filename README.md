@@ -100,9 +100,11 @@ The response will simply be a double value with the converted amount in the spec
 * `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
 * `callback->params` define the callback service.
 
-The payment api includes many options to serve callback data to your application. Depending on the request, the HTTP_POST response is programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
+The payment API aims to include many methods of serving callback data to your application. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options.
 
 ###### HTTP_POST PARAMS
+
+HTTP_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
 
     url             string      ex: "http://florincoin.info/mucua/callback/
     data            JSON object
@@ -121,6 +123,8 @@ The payment api includes many options to serve callback data to your application
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
 ###### BLOCKCHAIN_WRITE PARAMS
+
+Callbacks are not limited to `HTTP_POST`. You can request writing data to the blockchain instead.
 
     data      string      ex: "Hello world! I love freedom of speech."
     binary    string      ex: "01001000" 
