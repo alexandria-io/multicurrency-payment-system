@@ -15,9 +15,8 @@ The multi-currency-API has a few key features:
 
 Below is a list of all requests and how they are handled by the program.
 
-#### quote
-
 -----
+#### quote
 
     quote POST
       currency      string      ex: "USD"
