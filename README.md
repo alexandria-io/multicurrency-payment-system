@@ -15,7 +15,7 @@ The multi-currency-api is a service that accepts HTTP requests and serves data i
 * Forwards funds to a specified address (only for homogeneous currency requests).
 * Records all completed transactions into a ledger for historical purposes.
 
-Requests
+Specification
 ---
 
 Below is a list of all requests and how they are handled by the program.
@@ -160,4 +160,23 @@ If `callback` is specified, the payment API (which runs as a service) will begin
     {
         "currency":"BTC",
     }
+
+
+### status
+
+#### status request
+
+    POST
+      address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
+
+* `address` specifies the payment request we're interested in. Each payment request is identified by the address created for it.
+
+#### status response
+
+    status      JSON object    ex: "{'confirmed':true,'confirms':12}
+
+The response will contain information about the payment address.
+
+#### status example
+
 
