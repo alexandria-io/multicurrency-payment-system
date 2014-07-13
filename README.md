@@ -84,12 +84,14 @@ The response will simply be a double value with the converted amount in the spec
 #### payment request
 
     POST
-      currency      string      ex: "BTC"
-      amount        int         ex: 100000
-     *timeout       int         ex: 59000, 1405230924
-     *callback      JSON object       
-        method      string      ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
-        params      JSON object
+      currency        string        ex: "BTC"
+      amount          int           ex: 100000
+     *timeout         int           ex: 59000, 1405230924
+     *callback        JSON object       
+        method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
+        min_confirms  int           ex: 5
+        max_confirms  int           ex: 20
+        params        JSON object
           HTTP_POST PARAMS:         See below.
           BLOCKCHAIN_WRITE PARAMS:  See below.
 
@@ -98,9 +100,11 @@ The response will simply be a double value with the converted amount in the spec
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
 * `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
 * `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
+* `min_confirms` is the minimum amount of confirms needed to trigger a callback.
+* `max_confirms` is the maximum amount of confirms required to trigger a callback. After `max_confirms` has passed, no more callbacks will be sent.
 * `callback->params` define the callback service.
 
-The payment API aims to include many methods of serving callback data to your application. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options.
+The payment API request will build a payment listener. When the payment listener sees that certain conditions are met, a callback is fired off. Callbacks are fired off when both `amount` and `min_confirms` are reached. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options for callbacks served by the multi-currency-api.
 
 ###### HTTP_POST PARAMS
 
@@ -112,14 +116,10 @@ HTTP_POST callbacks are programmable. This makes use of the application's connec
       time          boolean     ex: true
       hash          boolean     ex: true
       confirms      boolean     ex: true
-      min_confirms  int         ex: 5
-      max_confirms  int         ex: 20
       custom        JSON object
 
 * `url` is the URL that will be served with callback POST data. *Note: when a callback fails, it will retry every 2, 4, 8, ... etc seconds, growing exponentially.*
-* All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with the block number when `amount` is reached.
-* `min_confirms` is the minimum amount of confirms needed to trigger a callback.
-* `max_confirms` is the maximum amount of confirms required to trigger a callback. After `max_confirms` has passed, no more callbacks will be sent.
+* All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with a callback containing the block number.
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
 ###### BLOCKCHAIN_WRITE PARAMS
