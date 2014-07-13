@@ -20,8 +20,6 @@ Below is a list of all requests and how they are handled by the program.
 
 ### quote
 
---------
-
 #### quote request
 
     POST
@@ -126,6 +124,10 @@ The payment api includes many options to serve callback data to your application
 
 * `data` specifies utf-8 data stored to the Florincoin blockchain.
 * `binary` specifies a string of binary code to be stored in the Florincoin blockchain.
+
+----
+
+### payment
 
 #### payment response 
 
