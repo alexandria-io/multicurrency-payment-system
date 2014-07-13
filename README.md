@@ -25,7 +25,7 @@ Below is a list of all requests and how they are handled by the program.
       amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
 
-* `currency` specifies the base crypto, `r_currency` represents a specific currency pairing we are interested in.
+* `currency` specifies the base crypto, `r_currency` is the currency pairing we are interested in.
 
 Future versions will allow multiple `r_currency` options.
 
