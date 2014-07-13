@@ -27,11 +27,9 @@ Below is a list of all requests and how they are handled by the program.
       amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
 
-* `currency` specifies the base currency, `r_currency` is the currency pairing we are interested in.
-
+* `currency` specifies the base currency.
 * `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
-
-* `r_currency` specifies a single currency the requstor wants (to reduce HTTP traffic and simplify code).
+* `r_currency` specifies a single currency the requstor wants to know about (this option reduces HTTP traffic and simplifes code).
 
 Future versions will allow multiple `r_currency` options.
 
@@ -49,7 +47,7 @@ If `r_currency` is not specified, the response will be a list of key:value pairs
 
     {
         "currency": "USD",
-        "amount": 20.00
+        "amount": 2000
     }
     
 *quote response:*
@@ -67,7 +65,7 @@ However, if `r_currency` is specified, the request will look like this:
 
     {
         "currency": "USD"
-        "amount": 20.00
+        "amount": 2000
         "r_currency": "FLO"
     }
 
@@ -75,7 +73,9 @@ The response will simply be a double value with the converted amount in the spec
 
 *quote response:*
 
-    { 30000 }
+    { 
+        3000000000000
+    }
 
 
 #### payment request
@@ -86,44 +86,50 @@ The response will simply be a double value with the converted amount in the spec
      *timeout       int         ex: 59000, 1405230924
      *callback      JSON object       
         method      string      ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
-                                
         params      JSON object
-          HTTP_POST PARAMS:
-          url       string      ex: "http://florincoin.info/mucua/callback/
-          data      string      ex: "{'success':true,'sender':'florincoin.info'}"
-          BLOCKCHAIN_WRITE PARAMS:
-          data      string      ex: "Hello world! I love freedom of speech."
-          binary    string      ex: "01001000" 
+          HTTP_POST PARAMS:         See below.
+          BLOCKCHAIN_WRITE PARAMS:  See below.
 
 * `currency` defines which currency the requestor wants to pay in.
-
 * `amount` defines the amount of satoshis of that currency that marks this payment as "complete". If not specified, there is no minimum, and even 1 satoshi will mark the payment as "complete".
+* `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. If `timeout` is zero, the listener will persist forever.
+* `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
+* `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
+* `callback->params` define the callback service.
 
-* `timeout` defines the amount of time in which this payment will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached.
-
-* `callback` is a JSON object containing information about the callback requested via the payment API's callback service. It is explained in detail in the example section below.
-
-The payment api includes many options to serve callback data to your application. Specifically, the HTTP_POST params are programmable in a way that makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
-
-Below is the future specification for this API call in full.
-
-*NOTE: the basic API v0.1 will have only the above examples. The following examples will be implemented in future versions:*
+The payment api includes many options to serve callback data to your application. Depending on the request, the HTTP_POST response is programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
 
 ###### HTTP_POST PARAMS
 
+    url             string      ex: "http://florincoin.info/mucua/callback/
     data            JSON object
-      block         boolean 
-      time          boolean
-      hash          boolean
-      min_confirms  int
-      confirms      int
+      block         boolean     ex: true
+      time          boolean     ex: true
+      hash          boolean     ex: true
+      confirms      boolean     ex: true
+      min_confirms  int         ex: 5
+      max_confirms  int         ex: 20
       custom        JSON object
 
+* `url` is the URL that will be served with callback POST data. *Note: when a callback fails, it will retry every 2, 4, 8, ... etc seconds, growing exponentially.*
+* All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with the block number when `amount` is reached.
+* `min_confirms` is the minimum amount of confirms needed to trigger a callback.
+* `max_confirms` is the maximum amount of confirms required to trigger a callback. After `max_confirms` has passed, no more callbacks will be sent.
+* `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
+
+##### BLOCKCHAIN_WRITE PARAMS
+
+    data      string      ex: "Hello world! I love freedom of speech."
+    binary    string      ex: "01001000" 
+
+* `data` specifies utf-8 data stored to the Florincoin blockchain.
+* `binary` specifies a string of binary code to be stored in the Florincoin blockchain.
 
 #### payment response 
 
     address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
     timeout      int         ex: 10000
+
 
 The payment API responds based upon on the input of the received request. It will always, at the very least, respond with a pamynet address for the currency specified.
 
