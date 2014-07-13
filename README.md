@@ -77,6 +77,9 @@ The response will simply be a double value with the converted amount in the spec
         3000000000000
     }
 
+----
+
+### payment
 
 #### payment request
 
@@ -124,10 +127,6 @@ The payment api includes many options to serve callback data to your application
 
 * `data` specifies utf-8 data stored to the Florincoin blockchain.
 * `binary` specifies a string of binary code to be stored in the Florincoin blockchain.
-
-----
-
-### payment
 
 #### payment response 
 
