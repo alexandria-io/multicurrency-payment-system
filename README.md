@@ -27,9 +27,9 @@ Below is a list of all requests and how they are handled by the program.
       amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
 
-* `currency` specifies the base crypto, `r_currency` is the currency pairing we are interested in.
+* `currency` specifies the base currency, `r_currency` is the currency pairing we are interested in.
 
-* `amount` specifies the base crypto amount that will be compared to the list of crpyot-currencies in the response.
+* `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
 
 * `r_currency` specifies a single currency the requstor wants (to reduce HTTP traffic and simplify code).
 
