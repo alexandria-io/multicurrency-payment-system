@@ -4,10 +4,10 @@ multi-currency-api
 Golang implementation of a multi-currency payment API. This API will allow requests for payment addresses to facilitate trade in multiple currencies and enable easier access to blockchain functionality.
 
 
-Specification
+Introduction
 -------------
 
-The multi-currency-API has a few key features:
+The multi-currency-api is a service that accepts HTTP requests and serves data in response. It also has a payment listener component which is initialized by a user's request for a payment address. This listener fires off callbacks when certain conditions are met. These are the key features:
 
 * Provides multi-currency exchange rates based on specified exchange APIs.
 * Handles requests for payment addresses.
