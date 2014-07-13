@@ -1,7 +1,7 @@
 multi-currency-api
 ==================
 
-Golang implementation of a multi-currency payment API
+Golang implementation of a multi-currency payment API. This API will allow requests for payment addresses to facilitate trade in multiple currencies and to enable easier access to blockchain functionality.
 
 
 Specification
@@ -9,8 +9,10 @@ Specification
 
 The multi-currency-API has a few key features:
 
-* Handles requests from external sources.
-* Serves data and sends HTTP responses when conditions are met.
+* Provides multi-currency exchange rates based on specified exchange APIs.
+* Handles requests for payment addresses.
+* Creates a payment listener to fire off a callbacks when conditions are met.
+* Forwards funds to a specified address (only for homogeneous currency requests).
 * Records all completed transactions into a ledger for historical purposes.
 
 Requests
@@ -86,6 +88,7 @@ The response will simply be a double value with the converted amount in the spec
     POST
       currency        string        ex: "BTC"
       amount          int           ex: 100000
+     *forward_to       string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
      *timeout         int           ex: 59000, 1405230924
      *callback        JSON object       
         method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
@@ -97,6 +100,7 @@ The response will simply be a double value with the converted amount in the spec
 
 * `currency` defines which currency the requestor wants to pay in.
 * `amount` defines the amount of satoshis of that currency that marks this payment as "complete". If not specified, there is no minimum, and even 1 satoshi will mark the payment as "complete".
+* `forward_to` if specified, the exact amount paid (minus fees) will be forwarded to the address specified.
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
 * `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
 * `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
@@ -150,4 +154,5 @@ If `callback` is specified, the payment API (which runs as a service) will begin
 
     {
         "currency":"BTC",
+    }
 
