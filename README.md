@@ -20,7 +20,7 @@ Below is a list of all requests and how they are handled by the program.
 
 #### quote
 
-    quote POST
+    POST
       currency      string      ex: "USD"
       amount        int         ex: 1405
      *r_currency    string      ex: "BTC"
@@ -57,9 +57,9 @@ The response will simply be a double value with the converted amount in the spec
     { 30000 }
 
 
-**payment_address**
+#### payment_address
 
-    payment_address POST
+    POST
       currency      string      ex: "BTC"
       amount        int         ex: 
 
