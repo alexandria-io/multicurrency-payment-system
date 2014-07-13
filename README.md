@@ -79,7 +79,7 @@ The response will simply be a double value with the converted amount in the spec
         3000000000000
     }
 
-----
+---
 
 ### payment
 
@@ -161,22 +161,72 @@ If `callback` is specified, the payment API (which runs as a service) will begin
         "currency":"BTC",
     }
 
+---
 
 ### status
 
 #### status request
 
     POST
-      address      string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
+      address        string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
+     *callback_info  boolean     ex: true
 
 * `address` specifies the payment request we're interested in. Each payment request is identified by the address created for it.
+* `callback_info` specifies whether or not the requestor wants callback info in the response.
 
 #### status response
 
-    status      JSON object    ex: "{'confirmed':true,'confirms':12}
+    mempool        boolean        ex: true
+    received       int            ex: 2000
+    confirms       int            ex: 12
+    confirmed      boolean        ex: true
+    transactions   JSON object    ex: <List of transactions in JSON format>
+    callback       JSON object    ex: "{'confirmed':true,'confirms':12}"
 
-The response will contain information about the payment address.
+The response will contain information about the payment listener binded to the given payment address.
+
+* `mempool` is true or false if the transaction has been listed in the mempool. This will be set to `true` automatically when `confirms` is greater than zero, regardless of whether or not the transaction is actually seen in the mempool.
+* `received` is the amount of coins received on the address so far.
+* `confirms` is an integer representation of the number of confirms since `received` has reached `min_amount`.
+* `confirmed` will be set to `true` only when the address has accumulated enough `received` coins to satisfy `min_amount` and all transactions in the `transactions` list have above `min_confirms` confirmations.
+* `transactions` is a JSON object containing a list of txids associated with this address along with the amount of coins sent to the payment address in each transaction..
+* `callback` is a JSON object that has all relevant callback information.
 
 #### status example
 
+A simple example of a request and response:
 
+*status request:*
+
+    {
+        "address":"17qfT3hssK5mx7km7QtuogiXeka9Spo1VK",
+        "callback_info":true
+    }
+
+*status response:*
+
+    {
+        "mempool":true,
+        "confirms":12,
+        "confirmed":true,
+        "transactions": {
+            "28afb4933555aa6f1616abf7009af47c796713d50d144803cff87aa7c8ebaa47":30000,
+            "1df7ed637d64cf1282468198c6ae7f988f5ec8b88ee85623954528dd3710f311":40000,
+            "74110c887b09fc910e2f55772e2da7a6ac3f10d4157ca737725cd6e32d8ab75b":50000,
+        }
+        "callback": {
+            "method":"HTTP_POST",
+            "url":"http://florincoin.info/mucu/callback/",
+            "callbacks_sent":6,
+            "callback_history": {
+                1: {
+                    "success":true,
+                    "time":1405292062,
+                    "block":59000
+                },
+                /* etc... continues for all callbacks */
+            }
+        }
+    }
+
+This response is a JSON object with detailed information about the status of the payment request (identified by the address given in the original payment response) containing relevant info about the callback history.
