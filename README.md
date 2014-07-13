@@ -35,14 +35,14 @@ The response is determined by whether or not `r_currency` is specified.
 
 If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
 
-*quote request* 
+*quote request:* 
 
     {
         "currency": "USD"
         "amount": 20.00
     }
     
-The response will be something along these lines:
+*quote response:*
 
     {
        "BTC":0.03172
@@ -53,6 +53,8 @@ The response will be something along these lines:
 
 However, if `r_currency` is specified, the request will look like this:
 
+*quote request:*
+
     {
         "currency": "USD"
         "amount": 20.00
@@ -60,6 +62,8 @@ However, if `r_currency` is specified, the request will look like this:
     }
 
 The response will simply be a double value with the converted amount in the specified currency.
+
+*quote response:*
 
     { 30000 }
 
