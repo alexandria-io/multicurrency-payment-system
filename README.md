@@ -61,5 +61,36 @@ The response will simply be a double value with the converted amount in the spec
 
     POST
       currency      string      ex: "BTC"
-      amount        int         ex: 
+      amount        int         ex: 100000
+     *timeout       int         ex: 600
+     *callback      JSON object       
+        method      string      ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
+                                
+        params      JSON object
+          HTTP_POST PARAMS:
+          url       string      ex: "http://florincoin.info/mucua/callback/
+          data      string      ex: "{'success':true,'sender':'florincoin.info'}"
+          BLOCKCHAIN_WRITE PARAMS:
+          data      string      ex: "Hello world! I love freedom of speech."
+          binary    string      ex: "01001000" 
+
+The payment_address api includes many options to serve callback data to your application. Specifically, the HTTP_POST params are programmable in a way that makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
+
+Below is the future specification for this API call in full.
+
+***NOTE: the basic API v0.1 will have only the above examples***
+
+***The following examples will be implemented in further versions:***
+
+###### HTTP_POST PARAMS
+
+    data      JSON object
+      block   boolean 
+      time    boolean
+      hash    boolean
+
+
+#### Response
+
+The payment_address API 
 
