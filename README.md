@@ -27,23 +27,23 @@ Below is a list of all requests and how they are handled by the program.
     POST
       currency      string      ex: "USD"
       amount        int         ex: 1405
-     *r_currency    string      ex: "BTC"
+     *convert       string      ex: "BTC"
 
 * `currency` specifies the base currency.
 * `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
-* `r_currency` specifies a single currency the requstor wants to know about (this option reduces HTTP traffic and simplifes code).
+* `convert` specifies a single currency the requstor wants to know about (this option reduces HTTP traffic and simplifes code).
 
-Future versions will allow multiple `r_currency` options.
+Future versions will allow multiple `convert` options.
 
 #### quote response
 
     currency:amount      string:int      ex: "BTC":3172000
 
-The response is determined by whether or not `r_currency` is specified. In general, the API responds with the currency conversion rates the requestor is interested in.
+The response is determined by whether or not `convert` is specified. In general, the API responds with the currency conversion rates the requestor is interested in.
 
 #### quote examples
 
-If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. Here is an example of a quote request and response without `r_currency` specified:
+If `convert` is not specified, the response will be a list of key:value pairs for all available currencies. Here is an example of a quote request and response without `convert` specified:
 
 *quote request:* 
 
@@ -61,14 +61,14 @@ If `r_currency` is not specified, the response will be a list of key:value pairs
        "FLO":3000000000000
     }
 
-However, if `r_currency` is specified, the request will look like this:
+However, if `convert` is specified, the request will look like this:
 
 *quote request:*
 
     {
         "currency": "USD"
         "amount": 2000
-        "r_currency": "FLO"
+        "convert": "FLO"
     }
 
 The response will simply be a double value with the converted amount in the specified currency.
