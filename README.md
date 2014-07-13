@@ -1,7 +1,7 @@
 multi-currency-api
 ==================
 
-Golang implementation of a multi-currency payment API. This API will allow requests for payment addresses to facilitate trade in multiple currencies and to enable easier access to blockchain functionality.
+Golang implementation of a multi-currency payment API. This API will allow requests for payment addresses to facilitate trade in multiple currencies and enable easier access to blockchain functionality.
 
 
 Specification
