@@ -18,6 +18,8 @@ Requests
 
 Below is a list of all requests and how they are handled by the program.
 
+--------
+
 #### quote request
 
     POST
@@ -32,6 +34,8 @@ Future versions will allow multiple `r_currency` options.
 #### quote response
 
 The response is determined by whether or not `r_currency` is specified.
+
+#### quote examples
 
 If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
 
