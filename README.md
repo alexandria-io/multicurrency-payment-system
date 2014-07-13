@@ -41,7 +41,7 @@ The response is determined by whether or not `r_currency` is specified. In gener
 
 #### quote examples
 
-If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. For example, if a `quote` request is received with the following parameters
+If `r_currency` is not specified, the response will be a list of key:value pairs for all available currencies. Here is an example of a quote request and response without `r_currency` specified:
 
 *quote request:* 
 
