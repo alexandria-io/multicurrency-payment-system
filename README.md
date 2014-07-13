@@ -18,9 +18,9 @@ Requests
 
 Below is a list of all requests and how they are handled by the program.
 
---------
-
 ### quote
+
+--------
 
 #### quote request
 
