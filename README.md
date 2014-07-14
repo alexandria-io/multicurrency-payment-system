@@ -40,6 +40,8 @@ All communication is done via HTTP POST with the POST body in JSON format. These
 
 Below you can find descriptions of all requests and how they are handled by the program. The responses are also described in detail. They vary depending on the input received in the initial request.
 
+Every parameter that is marked with an `*` is optional.
+
 ### quote
 
 #### quote request
