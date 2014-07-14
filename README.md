@@ -42,6 +42,8 @@ Below you can find descriptions of all requests and how they are handled by the 
 
 Every parameter that is marked with an `*` is optional.
 
+---
+
 ### quote
 
 #### quote request
