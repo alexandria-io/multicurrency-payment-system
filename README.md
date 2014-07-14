@@ -20,7 +20,7 @@ Installation
 
 Installing multicurrency payment system:
 
-    go get github.com/blocktech/multicurrency_payment_system
+    go get github.com/blocktech/multicurrency-payment-system
 
 Configuring URL endpoints can be done by modifying `config.go`.
 
@@ -131,7 +131,7 @@ The response will simply be a double value with the converted amount in the spec
 * `forward_to` if specified, the exact amount paid (minus fees) will be forwarded to the address specified.
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
 * `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is the payment system's callback service. It is explained in detail in the examples section below.
-* `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
+* `callback->method` determines the method of callback. Currently supporting `HTTP\_POST` and `BLOCKCHAIN\_WRITE` callbacks.
 * `callback->max_confirms` is the maximum amount of confirms that will fire off a callback. After `max_confirms` has passed, no more callbacks will be sent.
 * `callback->params` define the callback service.
 
@@ -139,7 +139,7 @@ A successful payment request will create a payment listener. Whenever a payment 
 
 ###### HTTP\_POST PARAMS
 
-HTTP\_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary HTTP traffic.
+`HTTP\_POST` callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary HTTP traffic.
 
     url             string      ex: "http://florincoin.info/mucua/callback/
     tx_notify       boolean     ex: false
@@ -157,7 +157,7 @@ HTTP\_POST callbacks are programmable. This makes use of the application's conne
 
 ###### BLOCKCHAIN\_WRITE PARAMS
 
-Callbacks are not limited to HTTP\_POST. You can request writing data to the blockchain instead.
+Callbacks are not limited to `HTTP\_POST`. You can request writing data to the blockchain instead.
 
     data      string      ex: "Hello world! I love freedom of speech."
     binary    string      ex: "01001000" 
