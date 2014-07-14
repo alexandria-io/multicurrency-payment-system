@@ -7,7 +7,7 @@ The multicurrency payment system enables payments in multiple crypto-currencies 
 Introduction
 ------------
 
-All communication is done via HTTP in JSON format. These are the key features:
+All communication is done via HTTP in JSON format. These are the keyfeatures:
 
 * Provides multicurrency exchange rates based on specified exchange APIs.
 * Handles requests for payment addresses.
