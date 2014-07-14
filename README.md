@@ -34,10 +34,9 @@ Communication
 
 All communication is done via HTTP POST with the POST body in JSON format. These are the necessary HTTP headers to communicate with the multicurrency payment system:
 
-    POST /blog/posts
+    POST 
     Accept: application/json
     Content-Type: application/json
-    Content-Length: 57
 
 Below you can find descriptions of all requests and how they are handled by the program. The responses are also described in detail. They vary depending on the input received in the initial request.
 
@@ -45,10 +44,9 @@ Below you can find descriptions of all requests and how they are handled by the 
 
 #### quote request
 
-    POST
-      currency      string      ex: "USD"
-      amount        int         ex: 1405
-     *convert       string      ex: "BTC"
+     currency      string      ex: "USD"
+     amount        int         ex: 1405
+    *convert       string      ex: "BTC"
 
 * `currency` specifies the base currency.
 * `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
@@ -106,21 +104,20 @@ The response will simply be a double value with the converted amount in the spec
 
 #### payment request
 
-    POST
-      currency        string        ex: "BTC"
-     *convert         string        ex: "FLO"
-      amount          int           ex: 100000
-      min_confirms    int           ex: 5
-      timeout         int           ex: 59000, 1405230924
-     *fee_quote       boolean       ex: true
-     *forward_to      string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
+     currency        string        ex: "BTC"
+    *convert         string        ex: "FLO"
+     amount          int           ex: 100000
+     min_confirms    int           ex: 5
+     timeout         int           ex: 59000, 1405230924
+    *fee_quote       boolean       ex: true
+    *forward_to      string        ex: "1AYvYfub9BsLDSF9CqShphKD23VUvvL6Cm"
 
-     *callback        JSON object       
-        method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
-        max_confirms  int           ex: 20
-        params        JSON object
-          HTTP_POST PARAMS:         See below.
-          BLOCKCHAIN_WRITE PARAMS:  See below.
+    *callback        JSON object       
+       method        string        ex: "HTTP_POST", "BLOCKCHAIN_WRITE"
+       max_confirms  int           ex: 20
+       params        JSON object
+         HTTP_POST PARAMS:         See below.
+         BLOCKCHAIN_WRITE PARAMS:  See below.
 
 * `currency` defines which currency the requestor wants to pay in.
 * `convert`, when set to a known currency, will convert `amount` to the currency set in `currency`.
@@ -233,10 +230,9 @@ In the above example, a request is sent to get a Bitcoin payment address to watc
 
 #### status request
 
-    POST
-      id             string      ex: "177-134-559"
-      address        string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
-     *callback_info  boolean     ex: true
+     id             string      ex: "177-134-559"
+     address        string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
+    *callback_info  boolean     ex: true
 
 * `id` is the unique identifier given to the requestor when they received a response from the payment system.
 * `address` specifies the address the requestor wants information about. Each payment listener is identified by the id number and address created for it.
