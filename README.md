@@ -1,24 +1,38 @@
-multi-currency-api
-==================
+multicurrency payment system
+============================
 
-Golang implementation of a multi-currency payment API. This API will allow requests for payment addresses to facilitate trade in multiple currencies and enable easier access to blockchain functionality.
+The multicurrency payment system enables payments in multiple crypto-currencies by providing backend structure to handle requests for payment addresses. Payment listeners are created to constantly scan the blockchain and fire off callbacks when certain criteria is met. Multicurrency payment system enables easier access to blockchain functionality. It is written in golang.
 
 
 Introduction
--------------
+------------
 
-The multi-currency-api is a service that accepts HTTP requests and serves data in response. It also has a payment listener component which is initialized by a user's request for a payment address. This listener fires off callbacks when certain conditions are met. These are the key features:
+All communication is done via HTTP in JSON format. These are the key features:
 
-* Provides multi-currency exchange rates based on specified exchange APIs.
+* Provides multicurrency exchange rates based on specified exchange APIs.
 * Handles requests for payment addresses.
 * Creates a payment listener to fire off callbacks when conditions are met.
 * Forwards funds to a specified address (only for homogeneous currency requests).
 * Records all completed transactions into a ledger for historical purposes.
 
-Specification
----
+Installation
+------------
 
-Below is a list of all requests and how they are handled by the program.
+Installing multicurrency payment system:
+
+`go get github.com/blocktech/multicurrency_payment_system`
+
+Configuring URL endpoints can be done by modifying `config.go`.
+
+    quote_endpoint=/quote/
+    payment_endpoint=/payment/
+    status_endpoint=/status/
+
+
+Specification
+-------------
+
+All requests and responses are transmitted via HTTP in JSON format. Below you can find descriptions of all requests and how they are handled by the program. The responses are also described in detail and vary depending on the input received in the request.
 
 ### quote
 
@@ -39,7 +53,7 @@ Future versions will allow multiple `convert` options.
 
     currency:amount      string:int      ex: "BTC":3172000
 
-The response is determined by whether or not `convert` is specified. In general, the API responds with the currency conversion rates the requestor is interested in.
+The response is determined by whether or not `convert` is specified. In general, the system responds with the currency conversion rates the requestor is interested in.
 
 #### quote examples
 
@@ -51,7 +65,7 @@ If `convert` is not specified, the response will be a list of key:value pairs fo
         "currency": "USD",
         "amount": 2000
     }
-    
+
 *quote response:*
 
     {
@@ -108,16 +122,16 @@ The response will simply be a double value with the converted amount in the spec
 * `fee_quote`, when set to `true`, will prevent this program from creating a new address or payment listener. The payment response will be the cost (in satoshis of `currency`) of setting up that listener.
 * `forward_to` if specified, the exact amount paid (minus fees) will be forwarded to the address specified.
 * `timeout` defines the amount of time in which this payment listener will expire. It is always an int, but behaves differently given different inputs. When given a block number as input, it will timeout when that block is reached. When given a timestamp, it will timeout when that timestamp is reached. `timeout` cannot be zero.
-* `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is called the payment API's callback service. It is explained in detail in the examples section below.
+* `callback` is a JSON object containing information about the callback requested. It defines the requestor's constraints for the payment listener. The payment listener serves data determined by the requestor's JSON parameters. This is the payment system's callback service. It is explained in detail in the examples section below.
 * `callback->method` determines the method of callback. Currently supporting HTTP_POST and BLOCKCHAIN_WRITE callbacks.
 * `callback->max_confirms` is the maximum amount of confirms that will fire off a callback. After `max_confirms` has passed, no more callbacks will be sent.
 * `callback->params` define the callback service.
 
-The payment API request will build a payment listener. When the payment listener sees that certain conditions are met, a callback is fired off. Callbacks are fired off when both `amount` and `min_confirms` are reached. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options for callbacks served by the multi-currency-api.
+A successful payment request will create a payment listener. Whenever a payment listener detects certain conditions, a callback is fired off. Callbacks are fired off when both `amount` and `min_confirms` are reached. At the moment, `HTTP_POST` and `BLOCKCHAIN_WRITE` are the two options for callbacks served by the multi-currency-api.
 
 ###### HTTP\_POST PARAMS
 
-HTTP\_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary API calls.
+HTTP\_POST callbacks are programmable. This makes use of the application's connectivity to the network and cuts down on unnecessary HTTP traffic.
 
     url             string      ex: "http://florincoin.info/mucua/callback/
     tx_notify       boolean     ex: false
@@ -130,7 +144,7 @@ HTTP\_POST callbacks are programmable. This makes use of the application's conne
 
 * `url` is the URL that will be served with callback POST data. *Note: when a callback fails, it will retry every 2, 4, 8, ... etc seconds, growing exponentially.*
 * `tx_notify` is a boolean which determines whether or not a callback will be sent when a new transaction paying this address is detected.
-* `data`: All `boolean` data values will assure a response from the API service that contains the data requested. For example, setting `block` to `true` will cause the API service to respond with a callback containing the block number.
+* `data`: All `boolean` data values will assure a response from the system that contains the data requested. For example, setting `block` to `true` will cause the system to respond with a callback containing the block number.
 * `custom` can be filled with whatever static JSON the requestor determines. It will be served to the callback endpoint URL specified in `url`.
 
 ###### BLOCKCHAIN\_WRITE PARAMS
@@ -152,7 +166,7 @@ Callbacks are not limited to HTTP\_POST. You can request writing data to the blo
     *fees         int         ex: 50
      timeout      int         ex: 10000
 
-The payment API responds based upon on the request. It will always, at the very least, respond with an id and pamynet address for the currency specified as well as the amount that must be paid.
+The payment system responds based upon on the inputs given in the payment request. The system will always, at the very least, respond with an id and pamynet address for the currency specified as well as the amount that must be paid.
 
 * `id` is a unique identifier that must be passed to the status request. It is a unique identifier that identifies a payment listener and its associated address.
 * `address` is a crypto-currency address that payments will be made to. The payment listener associated with this address is created when this response is sent.
@@ -163,9 +177,9 @@ The payment API responds based upon on the request. It will always, at the very 
 
 #### payment examples
 
-If no `callback` is specified, the API will remain silent and ping nothing when the payment is complete. Requestors will have no choice but to use the `status` API call to examine their payment.
+If no `callback` is specified, the system will remain silent and ping nothing when the payment is complete. Requestors will have no choice but to make use of status requests to examine their payment.
 
-If `callback` is specified, the payment API (which runs as a service) will begin serving callbacks when certain conditions are met. Here is a very general example that would be seen in the wild:
+If `callback` is specified, the payment system (which runs as a service) will begin serving callbacks when certain conditions are met. Here is a very general example that would be seen in the wild:
 
 *payment request:*
 
@@ -217,7 +231,7 @@ In the above example, a request is sent to get a Bitcoin payment address to watc
       address        string      ex: "17qfT3hssK5mx7km7QtuogiXeka9Spo1VK"
      *callback_info  boolean     ex: true
 
-* `id` is the unique identifier given to the requestor when they received a response from the payment API.
+* `id` is the unique identifier given to the requestor when they received a response from the payment system.
 * `address` specifies the address the requestor wants information about. Each payment listener is identified by the id number and address created for it.
 * `callback_info` specifies whether or not the requestor wants callback info in the response.
 
