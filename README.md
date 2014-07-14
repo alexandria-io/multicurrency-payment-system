@@ -20,7 +20,7 @@ Installation
 
 Installing multicurrency payment system:
 
-`go get github.com/blocktech/multicurrency_payment_system`
+    go get github.com/blocktech/multicurrency_payment_system
 
 Configuring URL endpoints can be done by modifying `config.go`.
 
@@ -32,7 +32,7 @@ Configuring URL endpoints can be done by modifying `config.go`.
 Communication
 -------------
 
-All communication is done via HTTP POST with the POST body in JSON format. These are the necessary HTTP headers to communication with the multicurrency payment systen:
+All communication is done via HTTP POST with the POST body in JSON format. These are the necessary HTTP headers to communicate with the multicurrency payment system:
 
     POST /blog/posts
     Accept: application/json
@@ -52,7 +52,7 @@ Below you can find descriptions of all requests and how they are handled by the 
 
 * `currency` specifies the base currency.
 * `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
-* `convert` specifies a single currency the requstor wants to know about (this option reduces HTTP traffic and simplifes code).
+* `convert` specifies a single currency the requestor wants to know about (this option reduces HTTP traffic and simplifies code).
 
 Future versions will allow multiple `convert` options.
 
@@ -173,7 +173,7 @@ Callbacks are not limited to HTTP\_POST. You can request writing data to the blo
     *fees         int         ex: 50
      timeout      int         ex: 10000
 
-The payment system responds based upon on the inputs given in the payment request. The system will always, at the very least, respond with an id and pamynet address for the currency specified as well as the amount that must be paid.
+The payment system responds based upon on the inputs given in the payment request. The system will always, at the very least, respond with an id and payment address for the currency specified as well as the amount that must be paid.
 
 * `id` is a unique identifier that must be passed to the status request. It is a unique identifier that identifies a payment listener and its associated address.
 * `address` is a crypto-currency address that payments will be made to. The payment listener associated with this address is created when this response is sent.
