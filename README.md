@@ -1,13 +1,13 @@
 multicurrency payment system
 ============================
 
-The multicurrency payment system enables payments in multiple crypto-currencies by providing backend structure to handle requests for payment addresses. Payment listeners are created to constantly scan the blockchain and fire off callbacks when certain criteria is met. Multicurrency payment system enables easier access to blockchain functionality. It is written in golang.
-
-
 Introduction
 ------------
 
-All communication is done via HTTP in JSON format. These are the key features:
+The multicurrency payment system enables payments in multiple crypto-currencies by providing a backend structure to organize payment addresses. Payment listeners are created to constantly scan the blockchain and fire off callbacks when certain criteria is met. The multicurrency payment system facilitates easy access to cross-blockchain functionality. It is written in golang.
+
+Key Features
+------------
 
 * Provides multicurrency exchange rates based on specified exchange APIs.
 * Handles requests for payment addresses.
@@ -29,10 +29,17 @@ Configuring URL endpoints can be done by modifying `config.go`.
     status_endpoint=/status/
 
 
-Specification
+Communication
 -------------
 
-All requests and responses are transmitted via HTTP in JSON format. Below you can find descriptions of all requests and how they are handled by the program. The responses are also described in detail and vary depending on the input received in the request.
+All communication is done via HTTP POST with the POST body in JSON format. These are the necessary HTTP headers to communication with the multicurrency payment systen:
+
+    POST /blog/posts
+    Accept: application/json
+    Content-Type: application/json
+    Content-Length: 57
+
+Below you can find descriptions of all requests and how they are handled by the program. The responses are also described in detail. They vary depending on the input received in the initial request.
 
 ### quote
 
