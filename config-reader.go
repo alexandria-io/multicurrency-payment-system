@@ -23,4 +23,5 @@ func ReadConfig(fileName string) {
 	}
 
 	fmt.Println(configuration.Users)
+	fmt.Println("Hello world!")
 }

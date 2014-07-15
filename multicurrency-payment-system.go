@@ -11,10 +11,10 @@ import (
 func main() {
 	// initialize gorilla mux
 	rtr := mux.NewRouter()
-	rtr.HandleFunc("{method:[a-z]+}", MethodHandler).Methods("GET")
+	rtr.HandleFunc("/api/v1/{method:[a-z]+}", MethodHandler).Methods("GET")
 	http.Handle("/", rtr)
 
-	// start listening on port specified in config
+	// start listening on port 3000
 	log.Println("Listening...")
 	err := http.ListenAndServe(":3000", nil)
 
