@@ -12,9 +12,11 @@ func MethodHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("test success")
 }
 
+/*
 func QuoteHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("quote success")
 }
+*/
 
 func MuxInit() *mux.Router {
 
