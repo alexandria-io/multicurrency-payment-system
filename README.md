@@ -42,6 +42,23 @@ Below you can find descriptions of all requests and how they are handled by the 
 
 Every parameter that is marked with an `*` is optional.
 
+Response Structure
+------------------
+
+    response      JSON
+    errors        JSON or false
+
+Response structure will always have at the least two keys, `response` and `errors`.
+
+* `response` contains the response JSON. It will be `false` if there are any errors.
+* `errors` will be `false` if the `response` was a success and `response` is populated with data. Otherwise, it will contain some JSON describing the error in this format:
+
+    { error code : error description }
+
+Here is an example:
+
+    { 1001:"The currency specified (<CURRENCY>) is not supported." }
+
 ---
 
 ### quote
@@ -51,10 +68,12 @@ Every parameter that is marked with an `*` is optional.
      currency      string      ex: "USD"
      amount        int         ex: 1405
     *convert       string      ex: "BTC"
+    *exchanges     JSON        ex: {"Cryptsy", "Bittrex", "BTC-e", "Coinbase"}
 
 * `currency` specifies the base currency.
 * `amount` specifies the base currency amount that will be compared to the list of currencies in the response.
 * `convert` specifies a single currency the requestor wants to know about (this option reduces HTTP traffic and simplifies code).
+* `exchanges` should be a list of exchanges that the requestor is interested in receiving quote data from.
 
 Future versions will allow multiple `convert` options.
 
