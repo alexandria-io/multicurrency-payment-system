@@ -53,6 +53,7 @@ Response structure will always have at the least two keys, `response` and `error
 * `response` contains the response JSON. It will be `false` if there are any errors.
 * `errors` will be `false` if the `response` was a success and `response` is populated with data. Otherwise, it will contain some JSON describing the error in this format:
 
+
     { error code : error description }
 
 Here is an example:
@@ -328,6 +329,7 @@ License
 
 ISC License 
 
+    Copyright (c) 2014, Blocktech Group <info@blocktech.com>
     Copyright (c) 2014, Joseph A Fiscella <jfiscella@gmail.com>
 
     Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
