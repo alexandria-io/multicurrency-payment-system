@@ -1,27 +1,26 @@
-package main
+package mucupa
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
-func ReadConfig(fileName string) {
+type Configuration struct {
+	Url  string
+	Port string
+}
 
-	type Configuration struct {
-		Users  []string
-		Groups []string
-	}
+func ReadConfig(fileName string) Configuration {
 
-	file, _ := os.Open("conf.json")
+	file, _ := os.Open(fileName)
 	decoder := json.NewDecoder(file)
+
 	configuration := Configuration{}
 	err := decoder.Decode(&configuration)
 
 	if err != nil {
-		fmt.Println("error:", err)
+		// return an error
 	}
 
-	fmt.Println(configuration.Users)
-	fmt.Println("Hello world!")
+	return configuration
 }

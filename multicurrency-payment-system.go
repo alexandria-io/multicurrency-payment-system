@@ -1,4 +1,4 @@
-package main
+package mucupa
 
 import (
 	"fmt"
@@ -8,10 +8,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main() {
-	// initialize gorilla mux
+func MethodHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("test success")
+}
+
+func QuoteHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("quote success")
+}
+
+func MuxInit() *mux.Router {
+
+	// create a new router with the specified listener functions
 	rtr := mux.NewRouter()
-	rtr.HandleFunc("/api/v1/{method:[a-z]+}", MethodHandler).Methods("GET")
+	rtr.HandleFunc("/test", MethodHandler).Methods("GET")
+	rtr.HandleFunc("/quote", QuoteHandler).Methods("GET")
 	http.Handle("/", rtr)
 
 	// start listening on port 3000
@@ -22,8 +32,5 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 		fmt.Printf("ListenAndServe:%s\n", err.Error())
 	}
-}
-
-func MethodHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("success")
+	return rtr
 }
