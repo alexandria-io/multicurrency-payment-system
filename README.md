@@ -329,7 +329,7 @@ License
 
 ISC License 
 
-    Copyright (c) 2014, Blocktech Group <info@blocktech.com>
+    Copyright (c) 2014, Blockchain Technology Group LLC <hello@blocktech.com>
     Copyright (c) 2014, Joseph A Fiscella <jfiscella@gmail.com>
 
     Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
