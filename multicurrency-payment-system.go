@@ -18,16 +18,19 @@ func QuoteHandler(w http.ResponseWriter, r *http.Request) {
 }
 */
 
-func MuxInit() *mux.Router {
+var config Configuration
+
+func MuxInit(conf Configuration) *mux.Router {
+
+	config = conf
 
 	// create a new router with the specified listener functions
 	rtr := mux.NewRouter()
 	rtr.HandleFunc("/test", MethodHandler).Methods("GET")
-	rtr.HandleFunc("/quote", QuoteHandler).Methods("GET")
+	rtr.HandleFunc("/quote", QuoteHandler).Methods("POST")
 	http.Handle("/", rtr)
 
 	// start listening on port 3000
-	log.Println("Listening...")
 	err := http.ListenAndServe(":3000", nil)
 
 	if err != nil {
