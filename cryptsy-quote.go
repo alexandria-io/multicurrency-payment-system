@@ -45,4 +45,7 @@ func CryptsyGetMarket(n string) {
 		fmt.Println("Unmarshaled JSON:")
 		fmt.Printf("%v", j)
 	}
+
+	// testing output
+
 }
