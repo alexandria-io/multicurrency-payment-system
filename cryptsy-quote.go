@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 )
 
 func CryptsyGetMarket(n string) {
@@ -37,7 +39,8 @@ func CryptsyGetMarket(n string) {
 	fmt.Println(body)
 
 	fmt.Println("Body from Cryptsy (cast as string):")
-	fmt.Println(string(body[:]))
+	bodyString := string(body[:])
+	fmt.Println(bodyString)
 
 	err2 := json.Unmarshal(body, &j)
 
@@ -47,5 +50,17 @@ func CryptsyGetMarket(n string) {
 	}
 
 	// testing output
+	CryptsyLog(bodyString)
 
+}
+
+func CryptsyLog(textToLog string) {
+	f, err := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		t.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println(textToLog)
 }
